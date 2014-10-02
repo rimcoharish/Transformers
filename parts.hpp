@@ -11,6 +11,8 @@
 #define upper_arm 8
 #define lower_arm 9
 #define hand 10
+#define lower_body 11
+#define front_tyres 12
 
 void struct_cube();
 void struct_cylinder();
@@ -22,3 +24,5 @@ void struct_hip();
 void struct_upper_arm();
 void struct_lower_arm();
 void struct_hand();
+void struct_lower_body();
+void struct_front_tyres();
