@@ -54,6 +54,52 @@ void struct_cube()
 		glEnd();
 		glPopMatrix();
 
+		glPushMatrix();
+		double offset = 0.0005;
+		glColor3f(0,0,0);
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0 - offset,1 + offset,1 + offset);
+			glVertex3f(0 - offset,0 - offset,1 + offset);
+			glVertex3f(1 + offset,0 - offset,1 + offset);
+			glVertex3f(1 + offset,1 + offset,1 + offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0 - offset,0 - offset,0 - offset);
+			glVertex3f(0 - offset,1 + offset,0 - offset);
+			glVertex3f(1 + offset,1 + offset,0 - offset);
+			glVertex3f(1 + offset,0 - offset,0 - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0 - offset,1 + offset,0 - offset);
+			glVertex3f(0 - offset,1 + offset,1 + offset);
+			glVertex3f(1 + offset,1 + offset,1 + offset);
+			glVertex3f(1 + offset,1 + offset,0 - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0 - offset,0 - offset,0 - offset);
+			glVertex3f(1 + offset,0 - offset,0 - offset);
+			glVertex3f(1 + offset,0 - offset,1 + offset);
+			glVertex3f(0 - offset,0 - offset,1 + offset);  	
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(1 + offset,1 + offset,0 - offset);
+			glVertex3f(1 + offset,1 + offset,1 + offset);
+			glVertex3f(1 + offset,0 - offset,1 + offset);
+			glVertex3f(1 + offset,0 - offset,0 - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0 - offset,1 + offset,0 - offset);
+			glVertex3f(0 - offset,0 - offset,0 - offset);
+			glVertex3f(0 - offset,0 - offset,1 + offset);
+			glVertex3f(0 - offset,1 + offset,1 + offset);
+		glEnd();
+		glPopMatrix();
+
 	glEndList();
 }
 
@@ -110,6 +156,52 @@ void struct_trapezium()
 			glVertex3f(-down,-0.5,-down);
 			glVertex3f(down,-0.5,-down);
 			glVertex3f(down,-0.5,down);
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glColor3f(0, 0, 0);
+		double offset = 0.0005;
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(- 0.5 - offset,0.5 + offset,0.5 + offset);
+			glVertex3f(- down - offset,- 0.5 - offset,down + offset);
+			glVertex3f(down + offset,- 0.5 - offset,down + offset);
+			glVertex3f(0.5 + offset,0.5 + offset,0.5 + offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(- 0.5 - offset,0.5 + offset,- 0.5 - offset);
+			glVertex3f(0.5 + offset,0.5 + offset,- 0.5 - offset);
+			glVertex3f(down + offset,- 0.5 - offset,- down - offset);
+			glVertex3f(- down - offset,- 0.5 - offset,- down - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(0.5 + offset,0.5 + offset,0.5 + offset);
+			glVertex3f(down + offset,- 0.5 - offset,down + offset);
+			glVertex3f(down + offset,- 0.5 - offset,- down - offset);
+			glVertex3f(0.5 + offset,0.5 + offset,- 0.5 - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(- 0.5 - offset,0.5 + offset,0.5 + offset);
+			glVertex3f(- 0.5 - offset,0.5 + offset,- 0.5 - offset);
+			glVertex3f(- down - offset,- 0.5 - offset,- down - offset);
+			glVertex3f(- down - offset,- 0.5 - offset,down + offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(- 0.5 - offset,0.5 + offset,0.5 + offset);
+			glVertex3f(0.5 + offset,0.5 + offset,0.5 + offset);
+			glVertex3f(0.5 + offset,0.5 + offset,- 0.5 - offset);
+			glVertex3f(- 0.5 - offset,0.5 + offset,- 0.5 - offset);
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(- down - offset,- 0.5 - offset,down + offset);
+			glVertex3f(- down - offset,- 0.5 - offset,- down - offset);
+			glVertex3f(down + offset,- 0.5 - offset,- down - offset);
+			glVertex3f(down + offset,- 0.5 - offset,down + offset);
 		glEnd();
 		glPopMatrix();
 

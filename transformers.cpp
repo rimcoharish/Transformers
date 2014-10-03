@@ -39,6 +39,8 @@ void renderGL(GLFWwindow* window){
 
 	glScalef(0.35, 0.35, 0.35);
 
+	glTranslatef(csX75::translate_x, csX75::translate_y, csX75::translate_z);
+
 	glRotatef(csX75::angle_y, 0, 1, 0);
 	glRotatef(csX75::angle_x, 1, 0, 0);
 
@@ -49,100 +51,106 @@ void renderGL(GLFWwindow* window){
 
 		glPushMatrix();
 
-			glTranslatef(- csX75::torso_x / 2, 0, - csX75::torso_z / 2);
-			glScalef(csX75::torso_x, csX75::torso_y, csX75::torso_z);
-			glCallList(cube);
+			glPushMatrix();
 
-		glPopMatrix();
+				glTranslatef(- csX75::torso_x / 2, 0, - csX75::torso_z / 2);
+				glScalef(csX75::torso_x, csX75::torso_y, csX75::torso_z);
+				glCallList(cube);
 
-		glPushMatrix();
-		
-			glTranslatef(0, csX75::neck_translate, 0);
+			glPopMatrix();
 
-			glCallList(neck);
+			//left hand
+			glPushMatrix();
+
+				glTranslatef((csX75::upper_arm_x + csX75::torso_x / 2), csX75::torso_y - csX75::upper_arm_y / 2, 0);
+				glTranslatef(- csX75::upper_arm_x, csX75::upper_arm_y / 2, 0);
+				glRotatef(csX75::left_upper_arm_z_angle, 0, 0, 1);
+				glTranslatef(csX75::upper_arm_x, 0, 0);
+				glRotatef(csX75::left_upper_arm_x_angle, 1, 0, 0);
+				glTranslatef(0, - csX75::upper_arm_y / 2, 0);
+				glCallList(upper_arm);
+				glTranslatef(0, - csX75::upper_arm_y / 2, - csX75::lower_arm_z / 2);
+				glRotatef(csX75::left_elbow_angle, 1, 0, 0);
+				glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
+				glCallList(lower_arm);
+
+			glPopMatrix();
+
+			//right hand
 
 			glPushMatrix();
 
-				glTranslatef(0, csX75::neck_y / 2, 0);
+				glTranslatef(- (csX75::upper_arm_x + csX75::torso_x / 2), csX75::torso_y - csX75::upper_arm_y / 2, 0);
+				glTranslatef(csX75::upper_arm_x, csX75::upper_arm_y / 2, 0);
+				glRotatef(csX75::right_upper_arm_z_angle, 0, 0, 1);
+				glTranslatef(- csX75::upper_arm_x, 0, 0);
+				glRotatef(csX75::right_upper_arm_x_angle, 1, 0, 0);
+				glTranslatef(0, - csX75::upper_arm_y / 2, 0);
+				glCallList(upper_arm);
+				glTranslatef(0, - csX75::upper_arm_y / 2, - csX75::lower_arm_z / 2);
+				glRotatef(csX75::right_elbow_angle, 1, 0, 0);
+				glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
+				glCallList(lower_arm);
+
+			glPopMatrix();
+
+			glPushMatrix();
+			
+				glTranslatef(0, csX75::neck_translate, 0);
+
+				glCallList(neck);
 
 				glPushMatrix();
 
-					glScalef(csX75::neck_joint_x, csX75::neck_joint_y, csX75::neck_joint_z);
-					glCallList(cone);
+					glTranslatef(0, csX75::neck_y / 2, 0);
 
-				glPopMatrix();
-
-				glColor3f(0, 0, 0.9);
-
-				glPushMatrix();
-
-					glRotatef(csX75::head_x_angle, 1, 0, 0);
-					glRotatef(csX75::head_y_angle, 0, 1, 0);
-					glRotatef(csX75::head_z_angle, 0, 0, 1);
 					glPushMatrix();
 
-						glTranslatef(- csX75::head_x / 2, 0, -csX75::head_z / 2);
-						glScalef(csX75::head_x, csX75::head_y, csX75::head_z);
-						glCallList(cube);
+						glScalef(csX75::neck_joint_x, csX75::neck_joint_y, csX75::neck_joint_z);
+						glCallList(cone);
 
 					glPopMatrix();
 
-					glColor3f(1, 1, 1);
+					glColor3f(0, 0, 0.9);
 
 					glPushMatrix();
 
-						glTranslatef(- csX75::eye_x / 2 + csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
-						glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
-						glCallList(cube);
+						glRotatef(csX75::head_x_angle, 1, 0, 0);
+						glRotatef(csX75::head_y_angle, 0, 1, 0);
+						glRotatef(csX75::head_z_angle, 0, 0, 1);
+						glPushMatrix();
 
-					glPopMatrix();
+							glTranslatef(- csX75::head_x / 2, 0, -csX75::head_z / 2);
+							glScalef(csX75::head_x, csX75::head_y, csX75::head_z);
+							glCallList(cube);
 
-					glPushMatrix();
+						glPopMatrix();
 
-						glTranslatef(- csX75::eye_x / 2 - csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
-						glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
-						glCallList(cube);
+						glPushMatrix();
+
+							glColor3f(1, 1, 1);
+
+							glTranslatef(- csX75::eye_x / 2 + csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
+							glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+							glCallList(cube);
+
+						glPopMatrix();
+
+						glPushMatrix();
+
+							glColor3f(1, 1, 1);
+
+							glTranslatef(- csX75::eye_x / 2 - csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
+							glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+							glCallList(cube);
+
+						glPopMatrix();
 
 					glPopMatrix();
 
 				glPopMatrix();
 
 			glPopMatrix();
-
-		glPopMatrix();
-
-		//left hand
-		glPushMatrix();
-
-			glTranslatef((csX75::upper_arm_x + csX75::torso_x / 2), csX75::torso_y - csX75::upper_arm_y / 2, 0);
-			glTranslatef(- csX75::upper_arm_x, csX75::upper_arm_y / 2, 0);
-			glRotatef(csX75::left_upper_arm_z_angle, 0, 0, 1);
-			glTranslatef(csX75::upper_arm_x, 0, 0);
-			glRotatef(csX75::left_upper_arm_x_angle, 1, 0, 0);
-			glTranslatef(0, - csX75::upper_arm_y / 2, 0);
-			glCallList(upper_arm);
-			glTranslatef(0, - csX75::upper_arm_y / 2, - csX75::lower_arm_z / 2);
-			glRotatef(csX75::left_elbow_angle, 1, 0, 0);
-			glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
-			glCallList(lower_arm);
-
-		glPopMatrix();
-
-		//right hand
-
-		glPushMatrix();
-
-			glTranslatef(- (csX75::upper_arm_x + csX75::torso_x / 2), csX75::torso_y - csX75::upper_arm_y / 2, 0);
-			glTranslatef(csX75::upper_arm_x, csX75::upper_arm_y / 2, 0);
-			glRotatef(csX75::right_upper_arm_z_angle, 0, 0, 1);
-			glTranslatef(- csX75::upper_arm_x, 0, 0);
-			glRotatef(csX75::right_upper_arm_x_angle, 1, 0, 0);
-			glTranslatef(0, - csX75::upper_arm_y / 2, 0);
-			glCallList(upper_arm);
-			glTranslatef(0, - csX75::upper_arm_y / 2, - csX75::lower_arm_z / 2);
-			glRotatef(csX75::right_elbow_angle, 1, 0, 0);
-			glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
-			glCallList(lower_arm);
 
 		glPopMatrix();
 

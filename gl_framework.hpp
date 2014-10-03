@@ -9,8 +9,8 @@
 
 namespace csX75
 {
-	extern double angle_x;
-	extern double angle_y;
+	extern double angle_x, angle_y;
+	extern double translate_x, translate_y, translate_z;
 	extern double left_knee_angle, right_knee_angle;
 	extern double left_leg_hip_angle, right_leg_hip_angle;
 	extern double left_leg_angle, right_leg_angle;

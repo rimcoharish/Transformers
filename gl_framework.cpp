@@ -8,6 +8,7 @@ namespace csX75
 	int win_width;
 	int win_height;
 	double angle_x = 0, angle_y = 0;
+	double translate_x = 0, translate_y = 0, translate_z = 0;
 	double left_knee_angle = 0, right_knee_angle = 0;
 	double left_leg_hip_angle = 0, right_leg_hip_angle = 0;
 	double left_leg_hip_z_angle = 0, right_leg_hip_z_angle = 0;
@@ -154,6 +155,18 @@ namespace csX75
 		//!Close the window if the ESC key was pressed
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GL_TRUE);
+		else if(key == GLFW_KEY_UP && mods == GLFW_MOD_SHIFT){
+			translate_y += 0.05;
+		}
+		else if(key == GLFW_KEY_DOWN && mods == GLFW_MOD_SHIFT){
+			translate_y -= 0.05;
+		}
+		else if(key == GLFW_KEY_LEFT && mods == GLFW_MOD_SHIFT){
+			translate_x -= 0.05;
+		}
+		else if(key == GLFW_KEY_RIGHT && mods == GLFW_MOD_SHIFT){
+			translate_x += 0.05;
+		}
 		else if (key == GLFW_KEY_LEFT){
 			angle_y += 1;
 			if (angle_y == 360) angle_y = 0;
