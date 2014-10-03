@@ -299,3 +299,41 @@ void struct_front_tyres(){
 
 	glEndList();
 }
+
+void struct_cone(){
+
+	glNewList(cone, GL_COMPILE);
+
+		double r = 1, h = 1;
+
+		glPushMatrix();
+	
+		for(int i = 0; i < 360; i++){
+			glBegin(GL_POLYGON);
+					glVertex3f(r * cos((i * M_PI) / 180), 0, r * sin((i * M_PI) / 180));
+					glVertex3f(r * cos((i + 1) * M_PI / 180), 0, r * sin((i + 1) * M_PI / 180));
+					glVertex3f(0, h, 0);
+			glEnd();
+		}
+
+		glPopMatrix();
+
+	glEndList();
+}
+
+void struct_neck(){
+
+	glNewList(neck, GL_COMPILE);
+
+		glColor3f(0.6, 0.2, 0.1);
+
+		glPushMatrix();
+
+			glScalef(csX75::neck_x, csX75::neck_y, csX75::neck_z);
+			glCallList(cylinder);
+
+		glPopMatrix();
+
+	glEndList();
+
+}

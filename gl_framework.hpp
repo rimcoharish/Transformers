@@ -14,10 +14,13 @@ namespace csX75
 	extern double left_knee_angle, right_knee_angle;
 	extern double left_leg_hip_angle, right_leg_hip_angle;
 	extern double left_leg_angle, right_leg_angle;
+	extern double left_leg_hip_z_angle, right_leg_hip_z_angle;
 	extern double hip_center_z, hip_center_angle;
 	extern double left_upper_arm_x_angle, left_upper_arm_z_angle;
 	extern double right_upper_arm_x_angle, right_upper_arm_z_angle;
 	extern double left_elbow_angle, right_elbow_angle;
+	extern double head_x_angle, head_y_angle, head_z_angle;
+	extern double neck_translate;
 	extern double leg_z;
 	const extern double leg_x, leg_y;
 	const extern double knee_joint_length;
@@ -29,6 +32,10 @@ namespace csX75
 	const extern double torso_x, torso_y, torso_z;
 	const extern double upper_arm_x, upper_arm_y, upper_arm_z;
 	const extern double lower_arm_x, lower_arm_y, lower_arm_z;
+	const extern double head_x, head_y, head_z;
+	const extern double neck_x, neck_y, neck_z;
+	const extern double neck_joint_x, neck_joint_y, neck_joint_z;
+	const extern double eye_x, eye_z, eye_y;
 
 	//! Initialize GL State
 	void initGL(void);

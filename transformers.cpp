@@ -18,6 +18,8 @@ void init_structures(){
 	struct_upper_arm();
 	struct_lower_arm();
 	struct_front_tyres();
+	struct_cone();
+	struct_neck();
 }
 
 GLFWwindow* getWindow(){
@@ -50,6 +52,62 @@ void renderGL(GLFWwindow* window){
 			glTranslatef(- csX75::torso_x / 2, 0, - csX75::torso_z / 2);
 			glScalef(csX75::torso_x, csX75::torso_y, csX75::torso_z);
 			glCallList(cube);
+
+		glPopMatrix();
+
+		glPushMatrix();
+		
+			glTranslatef(0, csX75::neck_translate, 0);
+
+			glCallList(neck);
+
+			glPushMatrix();
+
+				glTranslatef(0, csX75::neck_y / 2, 0);
+
+				glPushMatrix();
+
+					glScalef(csX75::neck_joint_x, csX75::neck_joint_y, csX75::neck_joint_z);
+					glCallList(cone);
+
+				glPopMatrix();
+
+				glColor3f(0, 0, 0.9);
+
+				glPushMatrix();
+
+					glRotatef(csX75::head_x_angle, 1, 0, 0);
+					glRotatef(csX75::head_y_angle, 0, 1, 0);
+					glRotatef(csX75::head_z_angle, 0, 0, 1);
+					glPushMatrix();
+
+						glTranslatef(- csX75::head_x / 2, 0, -csX75::head_z / 2);
+						glScalef(csX75::head_x, csX75::head_y, csX75::head_z);
+						glCallList(cube);
+
+					glPopMatrix();
+
+					glColor3f(1, 1, 1);
+
+					glPushMatrix();
+
+						glTranslatef(- csX75::eye_x / 2 + csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
+						glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+						glCallList(cube);
+
+					glPopMatrix();
+
+					glPushMatrix();
+
+						glTranslatef(- csX75::eye_x / 2 - csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
+						glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+						glCallList(cube);
+
+					glPopMatrix();
+
+				glPopMatrix();
+
+			glPopMatrix();
 
 		glPopMatrix();
 
@@ -108,6 +166,7 @@ void renderGL(GLFWwindow* window){
 			glTranslatef(0, csX75::thigh_y / 2, 0);
 			glRotatef(- csX75::left_leg_hip_angle, 1, 0, 0);
 			glRotatef(csX75::left_leg_angle, 0, 1, 0);
+			glRotatef(csX75::left_leg_hip_z_angle, 0, 0, 1);
 			glTranslatef(0, - csX75::thigh_y / 2, 0);
 			glCallList(thigh);
 			glCallList(knee_joint);
@@ -125,6 +184,7 @@ void renderGL(GLFWwindow* window){
 			glTranslatef(0, csX75::thigh_y / 2, 0);
 			glRotatef(- csX75::right_leg_hip_angle, 1, 0, 0);
 			glRotatef(csX75::right_leg_angle, 0, 1, 0);
+			glRotatef(csX75::right_leg_hip_z_angle, 0, 0, 1);
 			glTranslatef(0, - csX75::thigh_y / 2, 0);
 			glCallList(thigh);
 			glCallList(knee_joint);
@@ -136,8 +196,6 @@ void renderGL(GLFWwindow* window){
 		glPopMatrix();
 
 	glPopMatrix();
-
-	/*glTranslatef(-0.5, -0.5, -0.5);*/
 }
 
 int main(int argc, char *argv[]){

@@ -13,6 +13,8 @@
 #define hand 10
 #define lower_body 11
 #define front_tyres 12
+#define cone 14
+#define neck 15
 
 void struct_cube();
 void struct_cylinder();
@@ -26,3 +28,5 @@ void struct_lower_arm();
 void struct_hand();
 void struct_lower_body();
 void struct_front_tyres();
+void struct_cone();
+void struct_neck();
