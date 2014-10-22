@@ -22,6 +22,7 @@ namespace csX75
 	extern double head_x_angle, head_y_angle, head_z_angle;
 	extern double neck_translate;
 	extern double leg_z;
+	extern double tyre_x_angle, front_tyre_y_angle;
 	const extern double leg_x, leg_y;
 	const extern double knee_joint_length;
 	const extern double thigh_x, thigh_y, thigh_z;

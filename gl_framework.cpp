@@ -20,6 +20,7 @@ namespace csX75
 	double upper_arm_z_angle = 0.5;
 	double head_x_angle = 0, head_y_angle = 0, head_z_angle = 0;
 	double neck_translate = torso_y;
+	double tyre_x_angle = 0, front_tyre_y_angle = 0;
 
 	const double leg_x = 0.35, leg_y = - 0.5;
 	double leg_z = 0;
@@ -98,31 +99,37 @@ namespace csX75
 			left_knee_angle+=upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		for(double i = right_knee_angle; i < 0; i+=upper_arm_z_angle){
 			right_knee_angle+=upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		for(double i = left_leg_hip_z_angle; i > 0; i-=upper_arm_z_angle){
 			left_leg_hip_z_angle -= upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		for(double i = right_leg_hip_z_angle; i < 0; i+=upper_arm_z_angle){
 			right_leg_hip_z_angle += upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		while(left_leg_hip_angle != 0){
 			left_leg_hip_angle += ((left_leg_hip_angle < 0) ? 1 : -1) * upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		while(right_leg_hip_angle != 0){
 			right_leg_hip_angle += ((right_leg_hip_angle < 0) ? 1 : -1) * upper_arm_z_angle;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		while(head_x_angle != 0){
 			int sign = ((head_x_angle < 0) ? 1 : -1);
@@ -130,6 +137,7 @@ namespace csX75
 			//std::cout << head_x_angle << std::endl;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		while(head_y_angle != 0){
 			int sign = ((head_y_angle < 180) ? -1 : 1);
@@ -138,6 +146,7 @@ namespace csX75
 			//std::cout << head_y_angle << std::endl;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		while(head_z_angle != 0){
 			int sign = ((head_z_angle < 0) ? 1 : -1);
@@ -145,6 +154,7 @@ namespace csX75
 			//std::cout << head_z_angle << std::endl;
 			renderGL(getWindow());
 			glfwSwapBuffers(getWindow());
+			glfwPollEvents();
 		}
 		//std::cout << left_knee_angle << " " << right_knee_angle << " " << left_leg_hip_angle << " " << right_leg_hip_angle << " " << std::endl;
 	}
@@ -332,6 +342,22 @@ namespace csX75
 					right_elbow_angle -= 1;
 				}
 			}
+			else if(key == GLFW_KEY_J){
+				tyre_x_angle--;
+				if(tyre_x_angle < 0) tyre_x_angle = 359;
+			}
+			else if(key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT){
+				tyre_x_angle++;
+				if(tyre_x_angle == 360) tyre_x_angle = 0;
+			}
+			else if(key == GLFW_KEY_K){
+				front_tyre_y_angle--;
+				if(front_tyre_y_angle < 0) front_tyre_y_angle = 359;
+			}
+			else if(key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
+				front_tyre_y_angle++;
+				if(front_tyre_y_angle == 360) front_tyre_y_angle = 0;
+			}
 			else if(key == GLFW_KEY_T && action == GLFW_PRESS){
 				transformed = true;
 				reset_lower_body();
@@ -339,32 +365,38 @@ namespace csX75
 					csX75::hip_center_z -= hip_z_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = 0; i < 90; i+=hip_angle_increment){
 					csX75::hip_center_angle += hip_angle_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = 0; i < 180; i+=leg_angle_increment){
 					right_leg_angle += leg_angle_increment;
 					left_leg_angle -= leg_angle_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = 0; i < csX75::hip_z * 0.4 - csX75::thigh_z; i+=leg_z_increment){
 					csX75::leg_z += leg_z_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = left_upper_arm_z_angle; i > 0; i-=upper_arm_z_angle){
 					csX75::left_upper_arm_z_angle -= upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = right_upper_arm_z_angle; i < 0; i+=upper_arm_z_angle){
 					csX75::right_upper_arm_z_angle += upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				double angle_req = acos((torso_y / 2) / upper_arm_y) * 180 / M_PI - 4.5;
 				while(left_upper_arm_x_angle != angle_req){
@@ -378,6 +410,7 @@ namespace csX75
 					else left_upper_arm_x_angle += sign * upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				while(right_upper_arm_x_angle != angle_req){
 					int sign;
@@ -390,6 +423,7 @@ namespace csX75
 					else right_upper_arm_x_angle += sign * upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				while(left_elbow_angle != - 2 * angle_req){
 					int sign;
@@ -399,6 +433,7 @@ namespace csX75
 					else left_elbow_angle += sign * upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				while(right_elbow_angle != - 2 * angle_req){
 					int sign;
@@ -408,11 +443,13 @@ namespace csX75
 					else right_elbow_angle += sign * upper_arm_z_angle;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				for(double i = neck_translate; i > torso_y / 2; i-=neck_translate_increment){
 					neck_translate -= neck_translate_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
+					glfwPollEvents();
 				}
 				std::cout << "Vehicle mode entered" << std::endl;
 				std::cout << "Left x angle - " << left_upper_arm_x_angle << std::endl;
@@ -441,37 +478,44 @@ namespace csX75
 				csX75::leg_z -= leg_z_increment;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = 0; i < 180; i+=leg_angle_increment){
 				right_leg_angle -= leg_angle_increment;
 				left_leg_angle += leg_angle_increment;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = 0; i < 90; i+=hip_angle_increment){
 				csX75::hip_center_angle -= hip_angle_increment;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = 0; i > - (csX75::torso_z); i-=hip_z_increment){
 				csX75::hip_center_z += hip_z_increment;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = 0; i < 30; i+=upper_arm_z_angle){
 				left_upper_arm_z_angle += upper_arm_z_angle;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = 0; i > -30; i-=upper_arm_z_angle){
 				right_upper_arm_z_angle -= upper_arm_z_angle;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			for(double i = neck_translate; i < torso_y; i+=neck_translate_increment){
 				neck_translate += neck_translate_increment;
 				renderGL(getWindow());
 				glfwSwapBuffers(getWindow());
+				glfwPollEvents();
 			}
 			std::cout << "Robot mode entered" << std::endl;
 			std::cout << "Left x angle - " << left_upper_arm_x_angle << std::endl;
@@ -492,6 +536,22 @@ namespace csX75
 			std::cout << "Head y angle - " << head_y_angle << std::endl;
 			std::cout << "Head z angle - " << head_z_angle << std::endl;
 			std::cout << "Neck Height - " << neck_translate << std::endl << std::endl;
+		}
+		else if(key == GLFW_KEY_J){
+			tyre_x_angle--;
+			if(tyre_x_angle < 0) tyre_x_angle = 359;
+		}
+		else if(key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT){
+			tyre_x_angle++;
+			if(tyre_x_angle == 360) tyre_x_angle = 0;
+		}
+		else if(key == GLFW_KEY_K){
+			front_tyre_y_angle--;
+			if(front_tyre_y_angle < 0) front_tyre_y_angle = 359;
+		}
+		else if(key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
+			front_tyre_y_angle++;
+			if(front_tyre_y_angle == 360) front_tyre_y_angle = 0;
 		}
 	}
 };

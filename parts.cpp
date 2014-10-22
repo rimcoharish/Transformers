@@ -289,7 +289,7 @@ void struct_leg(){
 
 		glPopMatrix();
 
-		glPushMatrix();
+		/*glPushMatrix();
 
 			glColor3f(0.1, 0.1, 0.1);
 			glTranslatef(0, - csX75::thigh_y / 2 - csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
@@ -303,11 +303,12 @@ void struct_leg(){
 
 			glColor3f(0.1, 0.1, 0.1);
 			glTranslatef(0, - csX75::thigh_y / 2 - csX75::shin_y - csX75::foot_y + csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
+			glRotatef(csX75::tyre_x_angle, 1, 0, 0);
 			glRotatef(90, 0, 0, 1);
 			glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
 			glCallList(cylinder);
 
-		glPopMatrix();
+		glPopMatrix();*/
 
 	glEndList();
 }
@@ -355,11 +356,11 @@ void struct_lower_arm(){
 
 		glPopMatrix();
 
-		glPushMatrix();
+		/*glPushMatrix();
 
 			glCallList(front_tyres);
 
-		glPopMatrix();
+		glPopMatrix();*/
 
 	glEndList();
 }
@@ -383,6 +384,8 @@ void struct_front_tyres(){
 
 			glColor3f(0.1, 0.1, 0.1);
 			glTranslatef(csX75::lower_arm_x / 2, 0, 0);
+			glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+			glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
 			glRotatef(90, 0, 0, 1);
 			glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
 			glCallList(cylinder);

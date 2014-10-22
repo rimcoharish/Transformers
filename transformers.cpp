@@ -26,6 +26,27 @@ GLFWwindow* getWindow(){
 	return window;
 }
 
+void renderRoom(GLFWwindow* window){
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearDepth(1.0);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	// glTranslatef(csX75::translate_x, csX75::translate_y, csX75::translate_z);
+
+	glRotatef(csX75::angle_y, 0, 1, 0);
+	glRotatef(csX75::angle_x, 1, 0, 0);
+
+	glColor3f(1,0.5,0.3);
+	glBegin(GL_QUADS);
+		glVertex4f(-1, 0, 1, 0);
+		glVertex4f(1, 0, 1, 0);
+		glVertex4f(1, 0, -1, 0);
+		glVertex4f(-1, 0, -1, 0);
+	glEnd();
+
+}
+
 void renderGL(GLFWwindow* window){
 	//rendering the transformerglLoadIdentity();
 	//Set framebuffer clear color
@@ -74,6 +95,20 @@ void renderGL(GLFWwindow* window){
 				glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
 				glCallList(lower_arm);
 
+				glPushMatrix();
+
+					glColor3f(0.1, 0.1, 0.1);
+					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
+					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
+					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
+					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
+					glRotatef(90, 0, 0, 1);
+					glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+					glCallList(cylinder);
+
+				glPopMatrix();
+
 			glPopMatrix();
 
 			//right hand
@@ -91,6 +126,20 @@ void renderGL(GLFWwindow* window){
 				glRotatef(csX75::right_elbow_angle, 1, 0, 0);
 				glTranslatef(- csX75::lower_arm_x / 2, - csX75::lower_arm_y, 0);
 				glCallList(lower_arm);
+
+				glPushMatrix();
+
+					glColor3f(0.1, 0.1, 0.1);
+					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
+					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
+					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
+					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
+					glRotatef(90, 0, 0, 1);
+					glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+					glCallList(cylinder);
+
+				glPopMatrix();
 
 			glPopMatrix();
 
@@ -183,6 +232,29 @@ void renderGL(GLFWwindow* window){
 			glTranslatef(0, csX75::thigh_y / 2, 0);
 			glCallList(leg);
 
+			//tyres
+			glPushMatrix();
+
+				glColor3f(0.1, 0.1, 0.1);
+				glTranslatef(0, - csX75::thigh_y / 2 - csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
+				glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+				glRotatef(90, 0, 0, 1);
+				glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+				glCallList(cylinder);
+
+			glPopMatrix();
+
+			glPushMatrix();
+
+				glColor3f(0.1, 0.1, 0.1);
+				glTranslatef(0, - csX75::thigh_y / 2 - csX75::shin_y - csX75::foot_y + csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
+				glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+				glRotatef(90, 0, 0, 1);
+				glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+				glCallList(cylinder);
+
+			glPopMatrix();
+
 		glPopMatrix();
 
 		//right leg
@@ -200,6 +272,29 @@ void renderGL(GLFWwindow* window){
 			glRotatef(- csX75::right_knee_angle, 1, 0, 0);
 			glTranslatef(0, csX75::thigh_y / 2, 0);
 			glCallList(leg);
+
+			//tyres
+			glPushMatrix();
+
+				glColor3f(0.1, 0.1, 0.1);
+				glTranslatef(0, - csX75::thigh_y / 2 - csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
+				glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+				glRotatef(90, 0, 0, 1);
+				glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+				glCallList(cylinder);
+
+			glPopMatrix();
+
+			glPushMatrix();
+
+				glColor3f(0.1, 0.1, 0.1);
+				glTranslatef(0, - csX75::thigh_y / 2 - csX75::shin_y - csX75::foot_y + csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
+				glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+				glRotatef(90, 0, 0, 1);
+				glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+				glCallList(cylinder);
+
+			glPopMatrix();
 
 		glPopMatrix();
 
@@ -249,6 +344,8 @@ int main(int argc, char *argv[]){
 
 		// Render here
 		renderGL(window);
+
+		//renderRoom(window);
 
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
