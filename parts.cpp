@@ -1,4 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
 #include "parts.hpp"
+
+double offset=0.005;
+GLuint TyreTex,ArmTex,LegTex,TorsoSideTex,TorsoFrontTex,HeadFrontTex;
+
+GLuint getTexture(const char * imagepath){
+	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
+	unsigned int dataPos;     // Position in the file where the actual data begins
+	unsigned int width, height;
+	unsigned int imageSize;   // = width*height*3
+	unsigned char * data;
+	FILE * file = fopen(imagepath,"rb");
+	fread(header, 1, 54, file);
+	dataPos    = *(int*)&(header[0x0A]);
+	imageSize  = *(int*)&(header[0x22]);
+	width      = *(int*)&(header[0x12]);
+	height     = *(int*)&(header[0x16]);
+	data = new unsigned char [imageSize];
+	fread(data,1,imageSize,file);
+	fclose(file);
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	delete[] data;
+	return textureID;
+}
+
+void initTextures(){
+	TyreTex  = getTexture("./images/Tyre.bmp");
+	ArmTex  = getTexture("./images/Hand.bmp");
+	LegTex  = getTexture("./images/Leg.bmp");
+	TorsoSideTex  = getTexture("./images/TorsoSide.bmp");
+	TorsoFrontTex  = getTexture("./images/TorsoFront.bmp");
+	HeadFrontTex  = getTexture("./images/Head.bmp");
+}
+
+
 
 void struct_cube()
 {
@@ -276,6 +320,46 @@ void struct_leg(){
 			glColor3f(0, 0, 1);
 			glTranslatef(- csX75::shin_x / 2, - csX75::shin_y - csX75::thigh_y / 2, - csX75::shin_z / 2);
 			glScalef(csX75::shin_x, csX75::shin_y, csX75::shin_z);
+
+			glEnable(GL_TEXTURE_2D);//right side
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, LegTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,0 - offset);
+						glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,0 - offset);
+						glTexCoord2f(0,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//left side
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, LegTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(0 - offset,0 - offset,0 - offset);
+						glTexCoord2f(1,1);glVertex3f(0 - offset,1 + offset,0 - offset);
+						glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//front
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, LegTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+						glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+						glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
 			glCallList(cube);
 
 		glPopMatrix();
@@ -288,27 +372,6 @@ void struct_leg(){
 			glCallList(cube);
 
 		glPopMatrix();
-
-		/*glPushMatrix();
-
-			glColor3f(0.1, 0.1, 0.1);
-			glTranslatef(0, - csX75::thigh_y / 2 - csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
-			glRotatef(90, 0, 0, 1);
-			glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
-			glCallList(cylinder);
-
-		glPopMatrix();
-
-		glPushMatrix();
-
-			glColor3f(0.1, 0.1, 0.1);
-			glTranslatef(0, - csX75::thigh_y / 2 - csX75::shin_y - csX75::foot_y + csX75::tyre_x, - (csX75::shin_z / 2 + (0.05 * csX75::hip_z)));
-			glRotatef(csX75::tyre_x_angle, 1, 0, 0);
-			glRotatef(90, 0, 0, 1);
-			glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
-			glCallList(cylinder);
-
-		glPopMatrix();*/
 
 	glEndList();
 }
@@ -335,7 +398,7 @@ void struct_upper_arm(){
 
 		glPushMatrix();
 
-			glColor3f(0.5, 0.5, 0.5);
+			glColor3f(0.2,0.1,0.2);
 			glScalef(csX75::upper_arm_x, csX75::upper_arm_y, csX75::upper_arm_z);	
 			glCallList(cylinder);
 
@@ -350,31 +413,54 @@ void struct_lower_arm(){
 
 		glPushMatrix();
 
-			glColor3f(1, 1, 1);
-			glScalef(csX75::lower_arm_x, csX75::lower_arm_y, csX75::lower_arm_z);	
+			glColor3f(0.133, 0.184, 0.361);
+			glScalef(csX75::lower_arm_x, csX75::lower_arm_y, csX75::lower_arm_z);
+
+			glEnable(GL_TEXTURE_2D);//right side
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, ArmTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,0 - offset);
+						glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,0 - offset);
+						glTexCoord2f(0,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//left side
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, ArmTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(0 - offset,0 - offset,0 - offset);
+						glTexCoord2f(1,1);glVertex3f(0 - offset,1 + offset,0 - offset);
+						glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//front
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D, ArmTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+						glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+						glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+						glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
 			glCallList(cube);
 
 		glPopMatrix();
 
-		/*glPushMatrix();
-
-			glCallList(front_tyres);
-
-		glPopMatrix();*/
-
 	glEndList();
 }
-
-/*void struct_hand(){
-
-	glNewList(hand, GL_COMPILE);
-
-		glPushMatrix();
-
-			glColor3f(0.5, 0.5, 0.5);
-			glTranslatef(csX75::hand_x / 2, csX75::hand_y / 2, csX75::hand_z / 2);
-			glTranslatef(0, - (csX75::upper_arm_y / 2 + ))
-}*/
 
 void struct_front_tyres(){
 
@@ -428,6 +514,136 @@ void struct_neck(){
 			glCallList(cylinder);
 
 		glPopMatrix();
+
+	glEndList();
+
+}
+
+void struct_back_tyres(){
+
+	double q = 1.0/sqrt(2);
+
+	glNewList(back_tyres, GL_COMPILE);
+
+		glColor3f(0, 0, 0);
+		glRotatef(90, 0, 0, 1);
+		glScalef(csX75::tyre_x, csX75::tyre_y, csX75::tyre_z);
+
+		glEnable(GL_TEXTURE_2D);//tyre right
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+			glBindTexture(GL_TEXTURE_2D, TyreTex);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);glVertex3f(-q-offset,0.5+offset,q+offset);
+					glTexCoord2f(1,0);glVertex3f(q+offset,0.5+offset,q+offset);
+					glTexCoord2f(1,1);glVertex3f(q+offset,0.5+offset,-q-offset);
+					glTexCoord2f(0,1);glVertex3f(-q-offset,0.5+offset,-q-offset);
+				glEnd();
+			glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+
+		glEnable(GL_TEXTURE_2D);//tyre right
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+			glBindTexture(GL_TEXTURE_2D, TyreTex);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);glVertex3f(-q-offset,-0.5-offset,q+offset);
+					glTexCoord2f(1,0);glVertex3f(q+offset,-0.5-offset,q+offset);
+					glTexCoord2f(1,1);glVertex3f(q+offset,-0.5-offset,-q-offset);
+					glTexCoord2f(0,1);glVertex3f(-q-offset,-0.5-offset,-q-offset);
+				glEnd();
+			glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		
+		glCallList(cylinder);
+
+	glEndList();
+
+}
+
+void struct_torso(){
+
+	glNewList(torso, GL_COMPILE);
+
+		glPushMatrix();
+
+			glColor3f(0.133, 0.184, 0.361);
+
+			glTranslatef(- csX75::torso_x / 2, 0, - csX75::torso_z / 2);
+			glScalef(csX75::torso_x, csX75::torso_y, csX75::torso_z);
+
+			glEnable(GL_TEXTURE_2D);//right
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D, TorsoSideTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+							glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,0 - offset);
+							glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,0 - offset);
+							glTexCoord2f(0,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//left
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D, TorsoSideTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+							glTexCoord2f(1,0);glVertex3f(0 - offset,0 - offset,0 - offset);
+							glTexCoord2f(1,1);glVertex3f(0 - offset,1 + offset,0 - offset);
+							glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//front
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D, TorsoFrontTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+							glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+							glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+							glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glCallList(cube);
+
+		glPopMatrix();
+
+	glEndList();
+
+}
+
+void struct_head(){
+
+	glNewList(head, GL_COMPILE);
+
+		glPushMatrix();
+
+				glTranslatef(- csX75::head_x / 2, 0, -csX75::head_z / 2);
+				glScalef(csX75::head_x, csX75::head_y, csX75::head_z);
+
+				glEnable(GL_TEXTURE_2D);//front
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D, HeadFrontTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(0 - offset,0 - offset,1 + offset);
+							glTexCoord2f(1,0);glVertex3f(1 + offset,0 - offset,1 + offset);
+							glTexCoord2f(1,1);glVertex3f(1 + offset,1 + offset,1 + offset);
+							glTexCoord2f(0,1);glVertex3f(0 - offset,1 + offset,1 + offset);
+						glEnd();
+					glPopMatrix();
+				glDisable(GL_TEXTURE_2D);
+
+				glCallList(cube);
+
+			glPopMatrix();
 
 	glEndList();
 

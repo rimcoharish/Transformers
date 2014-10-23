@@ -15,6 +15,9 @@
 #define front_tyres 12
 #define cone 14
 #define neck 15
+#define back_tyres 16
+#define torso 17
+#define head 18
 
 void struct_cube();
 void struct_cylinder();
@@ -30,3 +33,7 @@ void struct_lower_body();
 void struct_front_tyres();
 void struct_cone();
 void struct_neck();
+void struct_back_tyres();
+void struct_torso();
+void struct_head();
+void initTextures();

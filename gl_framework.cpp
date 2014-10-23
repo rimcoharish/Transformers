@@ -34,7 +34,7 @@ namespace csX75
 	const double torso_x = 1.4, torso_y = 1.4, torso_z = 1;
 	const double upper_arm_x = 0.2, upper_arm_y = 0.8, upper_arm_z = 0.2;
 	const double lower_arm_x = 0.41, lower_arm_y = 0.8, lower_arm_z = 0.41;
-	const double head_x = 0.5, head_y = 0.5, head_z = 0.5;
+	const double head_x = 0.6, head_y = 0.6, head_z = 0.6;
 	const double neck_x = 0.1, neck_y = 0.3, neck_z = 0.1;
 	const double neck_joint_x = 0.1, neck_joint_y = 0.1, neck_joint_z = 0.1;
 	const double eye_x = 0.05, eye_y = 0.05, eye_z = 0.05;
