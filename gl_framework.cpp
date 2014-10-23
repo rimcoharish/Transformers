@@ -342,21 +342,21 @@ namespace csX75
 					right_elbow_angle -= 1;
 				}
 			}
+			else if(key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT){
+				tyre_x_angle++;
+				if(tyre_x_angle == 360) tyre_x_angle = 0;
+			}	
 			else if(key == GLFW_KEY_J){
 				tyre_x_angle--;
 				if(tyre_x_angle < 0) tyre_x_angle = 359;
 			}
-			else if(key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT){
-				tyre_x_angle++;
-				if(tyre_x_angle == 360) tyre_x_angle = 0;
+			else if(key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
+				front_tyre_y_angle++;
+				if(front_tyre_y_angle == 360) front_tyre_y_angle = 0;
 			}
 			else if(key == GLFW_KEY_K){
 				front_tyre_y_angle--;
 				if(front_tyre_y_angle < 0) front_tyre_y_angle = 359;
-			}
-			else if(key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
-				front_tyre_y_angle++;
-				if(front_tyre_y_angle == 360) front_tyre_y_angle = 0;
 			}
 			else if(key == GLFW_KEY_T && action == GLFW_PRESS){
 				transformed = true;
@@ -445,7 +445,7 @@ namespace csX75
 					glfwSwapBuffers(getWindow());
 					glfwPollEvents();
 				}
-				for(double i = neck_translate; i > torso_y / 2; i-=neck_translate_increment){
+				for(double i = neck_translate; i > (torso_y - 0.4) / 2; i-=neck_translate_increment){
 					neck_translate -= neck_translate_increment;
 					renderGL(getWindow());
 					glfwSwapBuffers(getWindow());
@@ -537,21 +537,21 @@ namespace csX75
 			std::cout << "Head z angle - " << head_z_angle << std::endl;
 			std::cout << "Neck Height - " << neck_translate << std::endl << std::endl;
 		}
-		else if(key == GLFW_KEY_J){
-			tyre_x_angle--;
-			if(tyre_x_angle < 0) tyre_x_angle = 359;
-		}
 		else if(key == GLFW_KEY_J && mods == GLFW_MOD_SHIFT){
 			tyre_x_angle++;
 			if(tyre_x_angle == 360) tyre_x_angle = 0;
 		}
-		else if(key == GLFW_KEY_K){
-			front_tyre_y_angle--;
-			if(front_tyre_y_angle < 0) front_tyre_y_angle = 359;
+		else if(key == GLFW_KEY_J){
+			tyre_x_angle--;
+			if(tyre_x_angle < 0) tyre_x_angle = 359;
 		}
 		else if(key == GLFW_KEY_K && mods == GLFW_MOD_SHIFT){
 			front_tyre_y_angle++;
 			if(front_tyre_y_angle == 360) front_tyre_y_angle = 0;
+		}
+		else if(key == GLFW_KEY_K){
+			front_tyre_y_angle--;
+			if(front_tyre_y_angle < 0) front_tyre_y_angle = 359;
 		}
 	}
 };

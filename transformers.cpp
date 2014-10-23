@@ -103,9 +103,9 @@ void renderGL(GLFWwindow* window){
 
 					glColor3f(0.1, 0.1, 0.1);
 					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
-					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
+					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glCallList(back_tyres);
 
@@ -133,9 +133,9 @@ void renderGL(GLFWwindow* window){
 
 					glColor3f(0.1, 0.1, 0.1);
 					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
-					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
+					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glCallList(back_tyres);
 
@@ -169,26 +169,6 @@ void renderGL(GLFWwindow* window){
 						glRotatef(csX75::head_z_angle, 0, 0, 1);
 						glCallList(head);
 
-						// glPushMatrix();
-
-						// 	glColor3f(1, 1, 1);
-
-						// 	glTranslatef(- csX75::eye_x / 2 + csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
-						// 	glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
-						// 	glCallList(cube);
-
-						// glPopMatrix();
-
-						// glPushMatrix();
-
-						// 	glColor3f(1, 1, 1);
-
-						// 	glTranslatef(- csX75::eye_x / 2 - csX75::head_x / 4, - csX75::eye_y / 2 + 3 * csX75::head_y / 4, - csX75::eye_z / 2 + csX75::head_z / 2);
-						// 	glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
-						// 	glCallList(cube);
-
-						// glPopMatrix();
-
 					glPopMatrix();
 
 				glPopMatrix();
@@ -198,8 +178,6 @@ void renderGL(GLFWwindow* window){
 		glPopMatrix();
 
 	glPopMatrix();
-
-	/*glCallList(lower_body);*/
 
 	glPushMatrix();
 
