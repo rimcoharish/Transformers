@@ -1,6 +1,6 @@
 OPENGLLIB= -lGL
 GLEWLIB= -lGLEW
-GLFWLIB = -lglfw
+GLFWLIB = -lglfw -lGLU
 LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB)
 LDFLAGS=-L/usr/local/lib 
 CPPFLAGS=-I/usr/local/include

@@ -18,6 +18,7 @@
 #define back_tyres 16
 #define torso 17
 #define head 18
+#define surrounding 19
 
 void struct_cube();
 void struct_cylinder();
@@ -37,3 +38,4 @@ void struct_back_tyres();
 void struct_torso();
 void struct_head();
 void initTextures();
+void struct_surrounding();

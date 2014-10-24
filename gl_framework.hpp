@@ -23,6 +23,7 @@ namespace csX75
 	extern double neck_translate;
 	extern double leg_z;
 	extern double tyre_x_angle, front_tyre_y_angle;
+	extern double camera_angle;
 	const extern double leg_x, leg_y;
 	const extern double knee_joint_length;
 	const extern double thigh_x, thigh_y, thigh_z;
@@ -38,6 +39,13 @@ namespace csX75
 	const extern double neck_joint_x, neck_joint_y, neck_joint_z;
 	const extern double eye_x, eye_z, eye_y;
 
+	extern double camera_angle;
+	extern double camera1[9];
+	extern double camera2[9];
+	extern double camera3[9];
+	extern double currentCamera[9];
+	extern int CurrentCameraNumber;
+
 	//! Initialize GL State
 	void initGL(void);
 
@@ -47,6 +55,13 @@ namespace csX75
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	//!GLFW keyboard callback
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+	void toggle_view(int i);
+	bool gluInvertMatrix(GLfloat* m, GLfloat* invOut);
+	// void changeOtherCameraCordinates();
+	void ChangeView();
+	// void viewer();
+
 };
 
 #endif

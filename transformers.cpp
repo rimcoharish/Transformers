@@ -5,6 +5,7 @@
 #include "parts.hpp"
 
 using namespace std;
+// using namespace csX75;
 
 //! The pointer to the GLFW window
 GLFWwindow* window;
@@ -26,6 +27,8 @@ void init_structures(){
 	struct_back_tyres();
 	struct_head();
 	struct_torso();
+	struct_surrounding();
+	csX75::ChangeView();
 }
 
 GLFWwindow* getWindow(){
@@ -34,42 +37,39 @@ GLFWwindow* getWindow(){
 
 GLuint getTexture(const char * imagepath);
 
+
 void renderRoom(GLFWwindow* window){
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	// glTranslatef(csX75::translate_x, csX75::translate_y, csX75::translate_z);
 
-	glRotatef(csX75::angle_y, 0, 1, 0);
-	glRotatef(csX75::angle_x, 1, 0, 0);
+	gluLookAt(csX75::currentCamera[0],csX75::currentCamera[1],csX75::currentCamera[2],
+				csX75::currentCamera[3],csX75::currentCamera[4],csX75::currentCamera[5],
+					csX75::currentCamera[6],csX75::currentCamera[7],csX75::currentCamera[8]);
 
-	glColor3f(1,0.5,0.3);
-	glBegin(GL_QUADS);
-		glVertex4f(-1, 0, 1, 0);
-		glVertex4f(1, 0, 1, 0);
-		glVertex4f(1, 0, -1, 0);
-		glVertex4f(-1, 0, -1, 0);
-	glEnd();
+	csX75::ChangeView();
+	// csX75::viewer();
+	// csX75::changeOtherCameraCordinates();
 
+	// for(int i=0;i<9;i++){cout<<csX75::currentCamera[i]<<" ";}cout<<endl;
+
+	glCallList(surrounding);
 }
 
+
+
+
 void renderGL(GLFWwindow* window){
+
+	renderRoom(window);
+
 	double q = 1.0/sqrt(2);
 	double offset = 0.01;
-	//rendering the transformerglLoadIdentity();
-	//Set framebuffer clear color
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//Set depth buffer furthest depth
-	glClearDepth(1.0);
 
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	glLoadIdentity();
-
-	glScalef(0.35, 0.35, 0.35);
-
+	
+	glTranslatef(0,2,0);
 	glTranslatef(csX75::translate_x, csX75::translate_y, csX75::translate_z);
 
 	glRotatef(csX75::angle_y, 0, 1, 0);
@@ -105,7 +105,7 @@ void renderGL(GLFWwindow* window){
 					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
 					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
-					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+					glRotatef(-csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glCallList(back_tyres);
 
@@ -135,7 +135,7 @@ void renderGL(GLFWwindow* window){
 					glTranslatef(csX75::lower_arm_x / 2, 0, 0);
 					glRotatef(- csX75::right_elbow_angle - csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glRotatef(csX75::front_tyre_y_angle, 0, 1, 0);
-					glRotatef(csX75::tyre_x_angle, 1, 0, 0);
+					glRotatef(-csX75::tyre_x_angle, 1, 0, 0);
 					glRotatef(csX75::right_elbow_angle + csX75::right_upper_arm_x_angle, 1, 0, 0);
 					glCallList(back_tyres);
 
@@ -309,13 +309,11 @@ int main(int argc, char *argv[]){
 	while(glfwWindowShouldClose(window) == 0){
 
 		// Render here
+		// renderRoom(window);
+		
 		renderGL(window);
-
-		//renderRoom(window);
-
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
-
 		// Poll for and process events
 		glfwPollEvents();
 	}

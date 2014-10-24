@@ -4,7 +4,8 @@
 #include "parts.hpp"
 
 double offset=0.005;
-GLuint TyreTex,ArmTex,LegTex,TorsoSideTex,TorsoFrontTex,HeadFrontTex;
+GLuint TyreTex,ArmTex,LegTex,TorsoSideTex,TorsoFrontTex,HeadFrontTex,surroundingTex,GrassTex;
+double RoomWidth=100;
 
 GLuint getTexture(const char * imagepath){
 	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
@@ -40,6 +41,8 @@ void initTextures(){
 	TorsoSideTex  = getTexture("./images/TorsoSide.bmp");
 	TorsoFrontTex  = getTexture("./images/TorsoFront.bmp");
 	HeadFrontTex  = getTexture("./images/Head.bmp");
+	surroundingTex = getTexture("./images/clouds.bmp");
+	GrassTex = getTexture("./images/Grass.bmp");
 }
 
 
@@ -647,4 +650,89 @@ void struct_head(){
 
 	glEndList();
 
+}
+
+void struct_surrounding(){
+	glNewList(surrounding, GL_COMPILE);
+		glPushMatrix();
+			glEnable(GL_TEXTURE_2D);//ground
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D,GrassTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+					glTexCoord2f(0,0);glVertex3f(-RoomWidth,0,RoomWidth);
+					glTexCoord2f(1,0);glVertex3f(RoomWidth,0,RoomWidth);
+					glTexCoord2f(1,1);glVertex3f(RoomWidth,0,-RoomWidth);
+					glTexCoord2f(0,1);glVertex3f(-RoomWidth,0,-RoomWidth);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//front
+				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				glBindTexture(GL_TEXTURE_2D,surroundingTex);
+				glPushMatrix();
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,0);glVertex3f(RoomWidth,0,RoomWidth);
+						glTexCoord2f(1,0);glVertex3f(-RoomWidth,0,RoomWidth);
+						glTexCoord2f(1,1);glVertex3f(-RoomWidth,RoomWidth,RoomWidth);
+						glTexCoord2f(0,1);glVertex3f(RoomWidth,RoomWidth,RoomWidth);
+					glEnd();
+				glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//right
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D,surroundingTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(RoomWidth,0,-RoomWidth);
+							glTexCoord2f(1,0);glVertex3f(RoomWidth,0,RoomWidth);
+							glTexCoord2f(1,1);glVertex3f(RoomWidth,RoomWidth,RoomWidth);
+							glTexCoord2f(0,1);glVertex3f(RoomWidth,RoomWidth,-RoomWidth);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//back
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D,surroundingTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(-RoomWidth,0,-RoomWidth);
+							glTexCoord2f(1,0);glVertex3f(RoomWidth,0,-RoomWidth);
+							glTexCoord2f(1,1);glVertex3f(RoomWidth,RoomWidth,-RoomWidth);
+							glTexCoord2f(0,1);glVertex3f(-RoomWidth,RoomWidth,-RoomWidth);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//left
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D,surroundingTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(-RoomWidth,0,RoomWidth);
+							glTexCoord2f(1,0);glVertex3f(-RoomWidth,0,-RoomWidth);
+							glTexCoord2f(1,1);glVertex3f(-RoomWidth,RoomWidth,-RoomWidth);
+							glTexCoord2f(0,1);glVertex3f(-RoomWidth,RoomWidth,RoomWidth);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+			glEnable(GL_TEXTURE_2D);//top
+					glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+					glBindTexture(GL_TEXTURE_2D,surroundingTex);
+					glPushMatrix();
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,0);glVertex3f(-RoomWidth,RoomWidth,-RoomWidth);
+							glTexCoord2f(1,0);glVertex3f(RoomWidth,RoomWidth,-RoomWidth);
+							glTexCoord2f(1,1);glVertex3f(RoomWidth,RoomWidth,RoomWidth);
+							glTexCoord2f(0,1);glVertex3f(-RoomWidth,RoomWidth,RoomWidth);
+						glEnd();
+					glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
+		glPopMatrix();
+	glEndList();
 }
