@@ -304,6 +304,8 @@ int main(int argc, char *argv[]){
 	
 	csX75::initGL();
 	init_structures();
+	csX75::initLights();
+	csX75::initLightPositions();
 
 	// Loop until the user closes the window
 	while(glfwWindowShouldClose(window) == 0){

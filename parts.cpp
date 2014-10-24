@@ -618,6 +618,52 @@ void struct_torso(){
 
 		glPopMatrix();
 
+		glPushMatrix();
+
+			glColor3f(1.0, 1.0, 1.0);
+
+			GLfloat lightDiff2[] = {1.0f, 1.0f, 1.0f, 1.0f};
+			GLfloat lightSpec2[] = {1.0f, 1.0f, 1.0f, 1.0f};
+			GLfloat light_dir2[] = {0.0f, 0.0f, -1.0f};
+			GLfloat lightPos2[] = {csX75::torso_x / 3, csX75::torso_y / 5, csX75::torso_z / 2 + 0.1, 0.0f};
+			glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDiff2);
+			glLightfv(GL_LIGHT2, GL_SPECULAR, lightSpec2);
+			glLightfv(GL_LIGHT2, GL_POSITION, lightPos2);
+			glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, light_dir2);
+			glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 5.0);
+			glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 15.0);
+
+			glTranslatef(csX75::torso_x / 3, csX75::torso_y / 5, csX75::torso_z / 2);
+			glTranslatef(- csX75::eye_x / 2, 0, 0);
+			glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+
+			glCallList(cube);
+
+		glPopMatrix();
+
+		glPushMatrix();
+
+			glColor3f(1.0, 1.0, 1.0);
+
+			GLfloat lightDiff3[] = {1.0f, 1.0f, 1.0f, 1.0f};
+			GLfloat lightSpec3[] = {1.0f, 1.0f, 1.0f, 1.0f};
+			GLfloat light_dir3[] = {0.0f, 0.0f, -1.0f};
+			GLfloat lightPos3[] = {-csX75::torso_x / 3, csX75::torso_y / 5, csX75::torso_z / 2 + 0.1, 0.0f};
+			glLightfv(GL_LIGHT3, GL_DIFFUSE, lightDiff3);
+			glLightfv(GL_LIGHT3, GL_SPECULAR, lightSpec3);
+			glLightfv(GL_LIGHT3, GL_POSITION, lightPos3);
+			glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, light_dir3);
+			glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 5.0);
+			glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 15.0);
+
+			glTranslatef(-csX75::torso_x / 3, csX75::torso_y / 5, csX75::torso_z / 2);
+			glTranslatef(- csX75::eye_x / 2, 0, 0);
+			glScalef(csX75::eye_x, csX75::eye_y, csX75::eye_z);
+
+			glCallList(cube);
+
+		glPopMatrix();
+
 	glEndList();
 
 }

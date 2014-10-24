@@ -62,6 +62,9 @@ namespace csX75
 	void ChangeView();
 	// void viewer();
 
+	void initLights();
+	void initLightPositions();
+
 };
 
 #endif

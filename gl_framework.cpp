@@ -39,13 +39,13 @@ namespace csX75
 	const double head_x = 0.6, head_y = 0.6, head_z = 0.6;
 	const double neck_x = 0.1, neck_y = 0.3, neck_z = 0.1;
 	const double neck_joint_x = 0.1, neck_joint_y = 0.1, neck_joint_z = 0.1;
-	const double eye_x = 0.05, eye_y = 0.05, eye_z = 0.05;
+	const double eye_x = 0.1, eye_y = 0.1, eye_z = 0.1;
 
 	bool transformed = false;
 	const double leg_z_increment = 0.005, leg_angle_increment = 1, hip_z_increment = 0.01, hip_angle_increment = 0.5;
 	const double neck_translate_increment = 0.01;
 
-	double camera1[9]={10,10,10,9,9.5,9,0,1,0};
+	double camera1[9]={0,4,12,0,4,11,0,1,0};
 
 	double camera2[9]={0,4,1,0,4,3,0,1,0};
 	double dum2[9]=   {0,4,1,0,4,3,0,1,0};
@@ -62,28 +62,45 @@ namespace csX75
 
 	int CurrentCameraNumber = 1;
 
+	void initLights(){
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_LIGHT1);
 
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_NORMALIZE);
+		glShadeModel(GL_SMOOTH);
+	}
 
-// void orientMe(float ang){
-//   currentCamera[3]=sin(camera_angle*M_PI/180.0);
-//   currentCamera[5]=-cos(camera_angle*M_PI/180.0);
-// }
+	void initLightPositions(){
 
-// void moveMeFlat(int i){
-//   currentCamera[0]=currentCamera[0]+i*currentCamera[3]*0.1;
-//   currentCamera[2]=currentCamera[2]+i*currentCamera[5]*0.1;
-// }
+		GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
+		GLfloat lightDiff0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat lightSpec0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat lightPos0[] = {10.0f, 10.0f, 10.0f, 0.0f};
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff0);
+		glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec0);
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 
+		GLfloat lightDiff1[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat lightSpec1[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat lightPos1[] = {-10.0f, 10.0f, -10.0f, 0.0f};
+		glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff1);
+		glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec1);
+		glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 
-
-	// void viewer(){
-	// 	glLoadIdentity();
-	// 	// gluLookAt(csX75::currentCamera[0],csX75::currentCamera[1],csX75::currentCamera[2],
-	// 	// 		csX75::currentCamera[3],csX75::currentCamera[4],csX75::currentCamera[5],
-	// 	// 			csX75::currentCamera[6],csX75::currentCamera[7],csX75::currentCamera[8]);
-	// 	ChangeView();
-	// }
+		GLfloat mat_diffuse[] = {0.5, 0.5, 0.5, 1.0};
+		GLfloat mat_specular[] = {0.2, 0.2, 0.2, 1.0};
+		GLfloat mat_shininess[] = {128.0};
+		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	}
 
 	void ChangeView(){
 		if(CurrentCameraNumber==1){
@@ -107,345 +124,6 @@ namespace csX75
 		gluLookAt(csX75::currentCamera[0],csX75::currentCamera[1],csX75::currentCamera[2],
 				csX75::currentCamera[3],csX75::currentCamera[4],csX75::currentCamera[5],
 					csX75::currentCamera[6],csX75::currentCamera[7],csX75::currentCamera[8]);
-	}
-
-
-	// void ChangeView(){
-
-	// 	glLoadIdentity();
-
-	// 	gluLookAt(csX75::currentCamera[0],csX75::currentCamera[1],csX75::currentCamera[2],
-	// 			csX75::currentCamera[3],csX75::currentCamera[4],csX75::currentCamera[5],
-	// 				csX75::currentCamera[6],csX75::currentCamera[7],csX75::currentCamera[8]);
-
-	// 	GLfloat ModelViewMatrix[16],InvModelViewMatrix[16];
-	// 	glGetFloatv(GL_MODELVIEW_MATRIX,ModelViewMatrix);
-
-	// 	gluInvertMatrix(ModelViewMatrix,InvModelViewMatrix);
-	// 	GLfloat eyePos[4],lookAt[4];
-
-	// 	if(CurrentCameraNumber==2){
-
-	// 		for(int i=0;i<16;i++){
-	// 			cout<<InvModelViewMatrix[i]<<" ";
-	// 		}
-	// 		cout << "a  " << endl;
-
-	// 		for(int i=0;i<9;i++){
-	// 			cout<<camera2[i]<<" ";
-	// 		}
-	// 		cout << "a  " << endl;
-
-	// 		int a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=InvModelViewMatrix[a]*camera2[0]+InvModelViewMatrix[b]*camera2[1]+InvModelViewMatrix[c]*camera2[2]+InvModelViewMatrix[d];
-	// 			lookAt[i]=InvModelViewMatrix[a]*camera2[3]+InvModelViewMatrix[b]*camera2[4]+InvModelViewMatrix[c]*camera2[5]+InvModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			currentCamera[i]=eyePos[i];
-	// 			currentCamera[i+3]=lookAt[i];
-	// 		}
-	// 	}
-
-	// 	else if(CurrentCameraNumber==3){
-	// 		int a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=InvModelViewMatrix[a]*camera3[0]+InvModelViewMatrix[b]*camera3[1]+InvModelViewMatrix[c]*camera3[2]+InvModelViewMatrix[d];
-	// 			lookAt[i]=InvModelViewMatrix[a]*camera3[3]+InvModelViewMatrix[b]*camera3[4]+InvModelViewMatrix[c]*camera3[5]+InvModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			currentCamera[i]=eyePos[i];
-	// 			currentCamera[i+3]=lookAt[i];
-	// 		}
-	// 	}
-
-	// 	else if(CurrentCameraNumber==1){
-	// 		for(int i=0;i<9;i++){
-	// 			currentCamera[i]=camera1[i];
-	// 		}
-	// 	}
-
-	// 	glLoadIdentity();
-	// 	gluLookAt(csX75::currentCamera[0],csX75::currentCamera[1],csX75::currentCamera[2],
-	// 			csX75::currentCamera[3],csX75::currentCamera[4],csX75::currentCamera[5],
-	// 				csX75::currentCamera[6],csX75::currentCamera[7],csX75::currentCamera[8]);
-	// }
-
-
-	// void MatrixMultiplication(GLfloat* ModelViewMatrix){
-
-	// 	GLfloat eyePos[4],lookAt[4];
-	// 	int a=0,b=4,c=8,d=12;
-
-	// 	for(int i=0;i<4;i++){
-	// 			eyePos[i]=ModelViewMatrix[a]*camera3[0]+ModelViewMatrix[b]*camera3[1]+ModelViewMatrix[c]*camera3[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera3[3]+ModelViewMatrix[b]*camera3[4]+ModelViewMatrix[c]*camera3[5]+ModelViewMatrix[d];
-
-	// 			eyePos[i]=ModelViewMatrix[a]*camera2[0]+ModelViewMatrix[b]*camera2[1]+ModelViewMatrix[c]*camera2[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera2[3]+ModelViewMatrix[b]*camera2[4]+ModelViewMatrix[c]*camera2[5]+ModelViewMatrix[d];
-
-	// 			a++;b++;c++;d++;
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			camera3[i]=eyePos[i];camera3[i+3]=lookAt[i];
-	// 			camera2[i]=eyePos[i];camera3[i+3]=lookAt[i];
-	// 		}
-
-	// }
-
-	// void changeOtherCameraCordinates(){
-
-	// 	GLfloat eyePos[4],lookAt[4];
-	// 	GLfloat ModelViewMatrix[16];
-	// 	glGetFloatv(GL_MODELVIEW_MATRIX,ModelViewMatrix);
-
-	// 	// for(int i=0;i<16;i++)cout <<  ModelViewMatrix[i] << " ";
-	// 	// cout << endl;
-
-	// 	if(CurrentCameraNumber==2){
-	// 		for(int i=0;i<9;i++){
-	// 			camera3[i]=dum3[i];
-	// 			camera2[i]=dum2[i];
-	// 		}
-
-	// 		int a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=ModelViewMatrix[a]*camera3[0]+ModelViewMatrix[b]*camera3[1]+ModelViewMatrix[c]*camera3[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera3[3]+ModelViewMatrix[b]*camera3[4]+ModelViewMatrix[c]*camera3[5]+ModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			camera3[i]=eyePos[i];
-	// 			camera3[i+3]=lookAt[i];
-	// 		}
-
-	// 	}
-
-	// 	else if(CurrentCameraNumber==3){
-
-	// 		for(int i=0;i<9;i++){
-	// 			camera2[i]=dum2[i];
-	// 		}
-
-	// 		int a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=ModelViewMatrix[a]*camera2[0]+ModelViewMatrix[b]*camera2[1]+ModelViewMatrix[c]*camera2[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera2[3]+ModelViewMatrix[b]*camera2[4]+ModelViewMatrix[c]*camera2[5]+ModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			camera2[i]=eyePos[i];
-	// 			camera2[i+3]=lookAt[i];
-	// 		}
-	// 	}
-
-	// 	else if(CurrentCameraNumber==1){
-
-
-	// 		for(int i=0;i<9;i++){
-	// 			camera2[i]=dum2[i];
-	// 			camera3[i]=dum3[i];
-	// 		}
-
-	// 		int a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=ModelViewMatrix[a]*camera2[0]+ModelViewMatrix[b]*camera2[1]+ModelViewMatrix[c]*camera2[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera2[3]+ModelViewMatrix[b]*camera2[4]+ModelViewMatrix[c]*camera2[5]+ModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-
-	// 		for(int i=0;i<3;i++){
-	// 			camera2[i]=eyePos[i];
-	// 			camera2[i+3]=lookAt[i];
-	// 		}
-
-	// 		for(int i=0;i<9;i++){
-	// 			std::cout << camera2[i] << " ";
-	// 		}
-	// 		cout << endl;
-
-	// 		a=0,b=4,c=8,d=12;
-	// 		for(int i=0;i<4;i++){
-	// 			eyePos[i]=ModelViewMatrix[a]*camera3[0]+ModelViewMatrix[b]*camera3[1]+ModelViewMatrix[c]*camera3[2]+ModelViewMatrix[d];
-	// 			lookAt[i]=ModelViewMatrix[a]*camera3[3]+ModelViewMatrix[b]*camera3[4]+ModelViewMatrix[c]*camera3[5]+ModelViewMatrix[d];
-	// 			a++;b++;c++;d++;
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			eyePos[i]=eyePos[i]/eyePos[3];
-	// 			lookAt[i]=lookAt[i]/lookAt[3];
-	// 		}
-	// 		for(int i=0;i<3;i++){
-	// 			camera3[i]=eyePos[i];
-	// 			camera3[i+3]=lookAt[i];
-	// 		}
-
-	// 		for(int i=0;i<9;i++){
-	// 			cout << "r " << camera3[i] << " ";
-	// 		}
-	// 		cout << endl;
-	// 	}
-
-	// }
-
-	bool gluInvertMatrix(GLfloat* m, GLfloat* invOut)
-	{
-		double inv[16], det;
-		int i;
-
-		inv[0] = m[5]  * m[10] * m[15] - 
-		m[5]  * m[11] * m[14] - 
-		m[9]  * m[6]  * m[15] + 
-		m[9]  * m[7]  * m[14] +
-		m[13] * m[6]  * m[11] - 
-		m[13] * m[7]  * m[10];
-
-		inv[4] = -m[4]  * m[10] * m[15] + 
-		m[4]  * m[11] * m[14] + 
-		m[8]  * m[6]  * m[15] - 
-		m[8]  * m[7]  * m[14] - 
-		m[12] * m[6]  * m[11] + 
-		m[12] * m[7]  * m[10];
-
-		inv[8] = m[4]  * m[9] * m[15] - 
-		m[4]  * m[11] * m[13] - 
-		m[8]  * m[5] * m[15] + 
-		m[8]  * m[7] * m[13] + 
-		m[12] * m[5] * m[11] - 
-		m[12] * m[7] * m[9];
-
-		inv[12] = -m[4]  * m[9] * m[14] + 
-		m[4]  * m[10] * m[13] +
-		m[8]  * m[5] * m[14] - 
-		m[8]  * m[6] * m[13] - 
-		m[12] * m[5] * m[10] + 
-		m[12] * m[6] * m[9];
-
-		inv[1] = -m[1]  * m[10] * m[15] + 
-		m[1]  * m[11] * m[14] + 
-		m[9]  * m[2] * m[15] - 
-		m[9]  * m[3] * m[14] - 
-		m[13] * m[2] * m[11] + 
-		m[13] * m[3] * m[10];
-
-		inv[5] = m[0]  * m[10] * m[15] - 
-		m[0]  * m[11] * m[14] - 
-		m[8]  * m[2] * m[15] + 
-		m[8]  * m[3] * m[14] + 
-		m[12] * m[2] * m[11] - 
-		m[12] * m[3] * m[10];
-
-		inv[9] = -m[0]  * m[9] * m[15] + 
-		m[0]  * m[11] * m[13] + 
-		m[8]  * m[1] * m[15] - 
-		m[8]  * m[3] * m[13] - 
-		m[12] * m[1] * m[11] + 
-		m[12] * m[3] * m[9];
-
-		inv[13] = m[0]  * m[9] * m[14] - 
-		m[0]  * m[10] * m[13] - 
-		m[8]  * m[1] * m[14] + 
-		m[8]  * m[2] * m[13] + 
-		m[12] * m[1] * m[10] - 
-		m[12] * m[2] * m[9];
-
-		inv[2] = m[1]  * m[6] * m[15] - 
-		m[1]  * m[7] * m[14] - 
-		m[5]  * m[2] * m[15] + 
-		m[5]  * m[3] * m[14] + 
-		m[13] * m[2] * m[7] - 
-		m[13] * m[3] * m[6];
-
-		inv[6] = -m[0]  * m[6] * m[15] + 
-		m[0]  * m[7] * m[14] + 
-		m[4]  * m[2] * m[15] - 
-		m[4]  * m[3] * m[14] - 
-		m[12] * m[2] * m[7] + 
-		m[12] * m[3] * m[6];
-
-		inv[10] = m[0]  * m[5] * m[15] - 
-		m[0]  * m[7] * m[13] - 
-		m[4]  * m[1] * m[15] + 
-		m[4]  * m[3] * m[13] + 
-		m[12] * m[1] * m[7] - 
-		m[12] * m[3] * m[5];
-
-		inv[14] = -m[0]  * m[5] * m[14] + 
-		m[0]  * m[6] * m[13] + 
-		m[4]  * m[1] * m[14] - 
-		m[4]  * m[2] * m[13] - 
-		m[12] * m[1] * m[6] + 
-		m[12] * m[2] * m[5];
-
-		inv[3] = -m[1] * m[6] * m[11] + 
-		m[1] * m[7] * m[10] + 
-		m[5] * m[2] * m[11] - 
-		m[5] * m[3] * m[10] - 
-		m[9] * m[2] * m[7] + 
-		m[9] * m[3] * m[6];
-
-		inv[7] = m[0] * m[6] * m[11] - 
-		m[0] * m[7] * m[10] - 
-		m[4] * m[2] * m[11] + 
-		m[4] * m[3] * m[10] + 
-		m[8] * m[2] * m[7] - 
-		m[8] * m[3] * m[6];
-
-		inv[11] = -m[0] * m[5] * m[11] + 
-		m[0] * m[7] * m[9] + 
-		m[4] * m[1] * m[11] - 
-		m[4] * m[3] * m[9] - 
-		m[8] * m[1] * m[7] + 
-		m[8] * m[3] * m[5];
-
-		inv[15] = m[0] * m[5] * m[10] - 
-		m[0] * m[6] * m[9] - 
-		m[4] * m[1] * m[10] + 
-		m[4] * m[2] * m[9] + 
-		m[8] * m[1] * m[6] - 
-		m[8] * m[2] * m[5];
-
-		det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-
-		if (det == 0)
-			return false;
-
-		det = 1.0 / det;
-
-		for (i = 0; i < 16; i++)
-			invOut[i] = inv[i] * det;
-
-		return true;
 	}
 
 
@@ -571,7 +249,31 @@ namespace csX75
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 //!Close the window if the ESC key was pressed
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		if (key == GLFW_KEY_4 && mods == GLFW_MOD_SHIFT){
+			glDisable(GL_LIGHT0);
+		}
+		else if (key == GLFW_KEY_4){
+			glEnable(GL_LIGHT0);
+		}
+		else if (key == GLFW_KEY_5 && mods == GLFW_MOD_SHIFT){
+			glDisable(GL_LIGHT1);
+		}
+		else if (key == GLFW_KEY_5){
+			glEnable(GL_LIGHT1);
+		}
+		else if (key == GLFW_KEY_6 && mods == GLFW_MOD_SHIFT){
+			glDisable(GL_LIGHT2);
+		}
+		else if (key == GLFW_KEY_6){
+			glEnable(GL_LIGHT2);
+		}
+		else if (key == GLFW_KEY_7 && mods == GLFW_MOD_SHIFT){
+			glEnable(GL_LIGHT3);
+		}
+		else if (key == GLFW_KEY_7){
+			glEnable(GL_LIGHT3);
+		}
+		else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		else if(key == GLFW_KEY_UP && mods == GLFW_MOD_SHIFT){
 			translate_y += 0.05;
@@ -613,40 +315,40 @@ namespace csX75
 		}
 		else if(key == GLFW_KEY_UP){
 
-			translate_x += 0.05 * sin((angle_y) * M_PI / 180);
-			translate_z += 0.05 * cos((angle_y) * M_PI / 180);
+			translate_x += 0.1 * sin((angle_y) * M_PI / 180);
+			translate_z += 0.1 * cos((angle_y) * M_PI / 180);
 
-			camera2[0]+=0.05 * sin((angle_y) * M_PI / 180);
-			camera2[2]+=0.05 * cos((angle_y) * M_PI / 180);
+			camera2[0]+=0.1 * sin((angle_y) * M_PI / 180);
+			camera2[2]+=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera3[0]+=0.05 * sin((angle_y) * M_PI / 180);
-			camera3[2]+=0.05 * cos((angle_y) * M_PI / 180);
+			camera3[0]+=0.1 * sin((angle_y) * M_PI / 180);
+			camera3[2]+=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera2[3]+=0.05 * sin((angle_y) * M_PI / 180);
-			camera2[5]+=0.05 * cos((angle_y) * M_PI / 180);
+			camera2[3]+=0.1 * sin((angle_y) * M_PI / 180);
+			camera2[5]+=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera3[3]+=0.05 * sin((angle_y) * M_PI / 180);
-			camera3[5]+=0.05 * cos((angle_y) * M_PI / 180);
+			camera3[3]+=0.1* sin((angle_y) * M_PI / 180);
+			camera3[5]+=0.1 * cos((angle_y) * M_PI / 180);
 			tyre_x_angle -= 5;
 			// 
 			// cout << "sdif" << endl;
 		}
 		else if(key == GLFW_KEY_DOWN){
 
-			translate_x -= 0.05 * sin((angle_y) * M_PI / 180);
-			translate_z -= 0.05 * cos((angle_y) * M_PI / 180);
+			translate_x -= 0.1 * sin((angle_y) * M_PI / 180);
+			translate_z -= 0.1 * cos((angle_y) * M_PI / 180);
 
-			camera2[0]-=0.05 * sin((angle_y) * M_PI / 180);
-			camera2[2]-=0.05 * cos((angle_y) * M_PI / 180);
+			camera2[0]-=0.1 * sin((angle_y) * M_PI / 180);
+			camera2[2]-=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera3[0]-=0.05 * sin((angle_y) * M_PI / 180);
-			camera3[2]-=0.05 * cos((angle_y) * M_PI / 180);
+			camera3[0]-=0.1 * sin((angle_y) * M_PI / 180);
+			camera3[2]-=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera2[3]-=0.05 * sin((angle_y) * M_PI / 180);
-			camera2[5]-=0.05 * cos((angle_y) * M_PI / 180);
+			camera2[3]-=0.1 * sin((angle_y) * M_PI / 180);
+			camera2[5]-=0.1 * cos((angle_y) * M_PI / 180);
 
-			camera3[3]-=0.05 * sin((angle_y) * M_PI / 180);
-			camera3[5]-=0.05 * cos((angle_y) * M_PI / 180);
+			camera3[3]-=0.1 * sin((angle_y) * M_PI / 180);
+			camera3[5]-=0.1 * cos((angle_y) * M_PI / 180);
 			tyre_x_angle -= 5;
 			// ChangeView();
 		}
