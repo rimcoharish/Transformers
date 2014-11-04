@@ -35,6 +35,8 @@ GLFWwindow* getWindow(){
 	return window;
 }
 
+
+
 GLuint getTexture(const char * imagepath);
 
 
@@ -63,6 +65,8 @@ void renderRoom(GLFWwindow* window){
 
 void renderGL(GLFWwindow* window){
 
+
+	//csX75::printState();
 	renderRoom(window);
 
 	double q = 1.0/sqrt(2);
@@ -312,8 +316,8 @@ int main(int argc, char *argv[]){
 
 		// Render here
 		// renderRoom(window);
-		
 		renderGL(window);
+		//csX75::Animate(window);
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
 		// Poll for and process events

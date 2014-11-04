@@ -64,6 +64,9 @@ namespace csX75
 
 	void initLights();
 	void initLightPositions();
+	void printState();
+
+	void Animate(GLFWwindow* window);
 
 };
 
