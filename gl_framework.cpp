@@ -158,7 +158,16 @@ namespace csX75
 		keyframes_file << front_tyre_y_angle << " ";
 		keyframes_file << head_light1 << " ";
 		keyframes_file << head_light2 << " ";
-		// keyframes_file << CurrentCameraNumber << endl;
+		keyframes_file << CurrentCameraNumber << " ";
+		keyframes_file << currentCamera[0] << " ";
+		keyframes_file << currentCamera[1] << " ";
+		keyframes_file << currentCamera[2] << " ";
+		keyframes_file << currentCamera[3] << " ";
+		keyframes_file << currentCamera[4] << " ";
+		keyframes_file << currentCamera[5] << " ";
+		keyframes_file << currentCamera[6] << " ";
+		keyframes_file << currentCamera[7] << " ";
+		keyframes_file << currentCamera[8] << endl;
 	}
 
 	void render(){
@@ -172,7 +181,7 @@ namespace csX75
 
 		//Part1 - Hip moves backwards, hands rotate about z
 
-		double increment = 0.025;
+		double increment = 0.03;
 
 		double left_upper_arm_z_angle_increment, right_upper_arm_z_angle_increment;
 		left_upper_arm_z_angle_increment = -left_upper_arm_z_angle * increment;
@@ -189,6 +198,7 @@ namespace csX75
 
 		double hip_center_z_increment = -torso_z * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			cout << i << endl;
 			hip_center_z += hip_center_z_increment;
@@ -204,20 +214,17 @@ namespace csX75
 		hip_center_z = -torso_z;
 		left_upper_arm_z_angle = 0;
 		right_upper_arm_z_angle = 0;
+		left_leg_hip_angle = 0;
+		right_leg_hip_angle = 0;
+		left_knee_angle = 0;
+		right_knee_angle = 0;
+		printState();
 
 		//Part1 - Complete
 
 		//Part2 - Hip rotates, the legs rotate 180 degrees, the arms position themselves, the head lowers into torso
 
 		double angle_req = acos((torso_y / 2) / upper_arm_y) * 180 / M_PI - 4.5;
-
-		/*//In which direction the left upper arm must be moved
-		if (left_upper_arm_x_angle < 180 && left_upper_arm_x_angle > angle_req) left_upper_arm_x_angle_sign = -1;
-		else left_upper_arm_x_angle_sign = 1;
-
-		//In which direction the right upper arm must be moved
-		if (right_upper_arm_x_angle < 180 && right_upper_arm_x_angle > angle_req) right_upper_arm_x_angle_sign = -1;
-		else right_upper_arm_x_angle_sign = 1;*/
 
 		if(left_upper_arm_x_angle > 180) left_upper_arm_x_angle -= 360;
 		if(right_upper_arm_x_angle > 180) right_upper_arm_x_angle -= 360;
@@ -239,6 +246,7 @@ namespace csX75
 
 		double descend = (1 - translate_y) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
@@ -255,26 +263,105 @@ namespace csX75
 
 		left_upper_arm_x_angle = angle_req;
 		right_upper_arm_x_angle = angle_req;
+		left_elbow_angle = - 2 * angle_req;
+		right_elbow_angle = - 2 * angle_req;
+		hip_center_angle = 90;
+		left_leg_angle = -180;
+		right_leg_angle = 180;
+		leg_z = hip_z * 0.4 - thigh_z;
+		neck_translate = (torso_y - 0.4) / 2;
+		printState();
+	}
 
+	void transform_back(){
+		transformed = false;
 
-		std::cout << "Left x angle - " << left_upper_arm_x_angle << std::endl;
-		std::cout << "Left z angle - " << left_upper_arm_z_angle << std::endl;
-		std::cout << "Right x angle - " << right_upper_arm_x_angle << std::endl;
-		std::cout << "Right z angle - " << right_upper_arm_z_angle << std::endl;
-		std::cout << "Left elbow angle - " << left_elbow_angle << std::endl;
-		std::cout << "Right elbow angle - " << right_elbow_angle << std::endl;
-		std::cout << "Left leg hip angle - " << left_leg_hip_angle << std::endl;
-		std::cout << "Right leg hip angle - " << right_leg_hip_angle << std::endl;
-		std::cout << "Left leg hip z angle - " << left_leg_hip_z_angle << std::endl;
-		std::cout << "Right leg hip z angle - " << right_leg_hip_z_angle << std::endl;
-		std::cout << "Left leg angle - " << left_leg_angle << std::endl;
-		std::cout << "Right leg angle - " << right_leg_angle << std::endl;
-		std::cout << "Left leg knee angle - " << left_knee_angle << std::endl;
-		std::cout << "Right leg knee angle - " << right_knee_angle << std::endl;
-		std::cout << "Head x angle - " << head_x_angle << std::endl;
-		std::cout << "Head y angle - " << head_y_angle << std::endl;
-		std::cout << "Head z angle - " << head_z_angle << std::endl;
-		std::cout << "Neck Height - " << neck_translate << std::endl << std::endl;
+		double increment = 0.03;
+
+		double angle_req = acos((torso_y / 2) / upper_arm_y) * 180 / M_PI - 4.5;
+
+		if(left_upper_arm_x_angle > 180) left_upper_arm_x_angle -= 360;
+		if(right_upper_arm_x_angle > 180) right_upper_arm_x_angle -= 360;
+
+		double left_upper_arm_x_angle_increment = (- left_upper_arm_x_angle) * increment;
+		double right_upper_arm_x_angle_increment = (- right_upper_arm_x_angle) * increment;
+
+		double left_elbow_angle_increment = (-left_elbow_angle + 30) * increment;
+		double right_elbow_angle_increment = (-right_elbow_angle + 30) * increment;
+
+		double hip_center_angle_increment = (- hip_center_angle) * increment;
+
+		double left_leg_y_angle_increment = (- left_leg_angle) * increment;
+		double right_leg_y_angle_increment = (- right_leg_angle) * increment;
+
+		double leg_z_increment1 = (- leg_z) * increment;
+
+		double neck_translate_increment = (torso_y - neck_translate) * increment;
+
+		double descend = (- translate_y) * increment;
+
+		printState();
+		for(double i = 0; i < 1; i+=increment){
+			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
+			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
+			left_elbow_angle += left_elbow_angle_increment;
+			right_elbow_angle += right_elbow_angle_increment;
+			hip_center_angle += hip_center_angle_increment;
+			left_leg_angle += left_leg_y_angle_increment;
+			right_leg_angle += right_leg_y_angle_increment;
+			leg_z += leg_z_increment1;
+			neck_translate += neck_translate_increment;
+			translate_y += descend;
+			render();
+		}
+
+		left_upper_arm_x_angle = 0;
+		right_upper_arm_x_angle = 0;
+		left_elbow_angle = -30;
+		right_elbow_angle = -30;
+		hip_center_angle = 0;
+		left_leg_angle = 0;
+		right_leg_angle = 0;
+		leg_z = 0;
+		neck_translate = torso_y;
+		printState();
+
+		double left_upper_arm_z_angle_increment, right_upper_arm_z_angle_increment;
+		left_upper_arm_z_angle_increment = (-30 -left_upper_arm_z_angle) * increment;
+		right_upper_arm_z_angle_increment = (30 -right_upper_arm_z_angle) * increment;
+
+		if(left_leg_hip_angle > 180) left_leg_hip_angle -= 360;
+		if(right_leg_hip_angle > 180) right_leg_hip_angle -= 360;
+
+		double left_leg_hip_angle_increment = -left_leg_hip_angle * increment;
+		double right_leg_hip_angle_increment = -right_leg_hip_angle * increment;
+
+		double left_knee_angle_increment = -left_knee_angle * increment;
+		double right_knee_angle_increment = -right_knee_angle * increment;
+
+		double hip_center_z_increment = -torso_z * increment;
+
+		printState();
+		for(double i = 0; i < 1; i+=increment){
+			cout << i << endl;
+			hip_center_z -= hip_center_z_increment;
+			left_upper_arm_z_angle -= left_upper_arm_z_angle_increment;
+			right_upper_arm_z_angle -= right_upper_arm_z_angle_increment;
+			left_leg_hip_angle -= left_leg_hip_angle_increment;
+			right_leg_hip_angle -= right_leg_hip_angle_increment;
+			left_knee_angle -= left_knee_angle_increment;
+			right_knee_angle -= right_knee_angle_increment;
+			render();
+		}
+
+		hip_center_z = 0;
+		left_upper_arm_z_angle = 30;
+		right_upper_arm_z_angle = -30;
+		left_leg_hip_angle = 0;
+		right_leg_hip_angle = 0;
+		left_knee_angle = 0;
+		right_knee_angle = 0;
+		printState();
 	}
 
 	void run_part1(double forward_len, double increment, double descend_len){
@@ -295,6 +382,7 @@ namespace csX75
 
 		double forward = forward_len * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
@@ -307,6 +395,13 @@ namespace csX75
 			translate_z += forward * cos((angle_y) * M_PI / 180);
 			render();
 		}
+		left_upper_arm_x_angle = -30;
+		right_upper_arm_x_angle = 45;
+		left_leg_hip_angle = -30;
+		right_leg_hip_angle = 30;
+		left_knee_angle = -30;
+		right_knee_angle = -30;
+		printState();
 	}
 
 	void run_part2(double forward_len, double increment, double descend_len){
@@ -327,6 +422,7 @@ namespace csX75
 
 		double forward = forward_len * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
@@ -339,6 +435,13 @@ namespace csX75
 			translate_z += forward * cos((angle_y) * M_PI / 180);
 			render();
 		}
+		left_upper_arm_x_angle = 0;
+		right_upper_arm_x_angle = 0;
+		left_leg_hip_angle = 0;
+		right_leg_hip_angle = 0;
+		left_knee_angle = 0;
+		right_knee_angle = 0;
+		printState();
 	}
 
 	void run_part3(double forward_len, double increment, double descend_len){
@@ -359,6 +462,7 @@ namespace csX75
 
 		double forward = forward_len * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
@@ -371,6 +475,13 @@ namespace csX75
 			translate_z += forward * cos((angle_y) * M_PI / 180);
 			render();
 		}
+		left_upper_arm_x_angle = 45;
+		right_upper_arm_x_angle = -30;
+		left_leg_hip_angle = 30;
+		right_leg_hip_angle = -30;
+		left_knee_angle = -30;
+		right_knee_angle = -30;
+		printState();
 	}
 
 	void run_part4(double forward_len, double increment, double descend_len){
@@ -391,6 +502,7 @@ namespace csX75
 
 		double forward = forward_len * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
@@ -403,13 +515,20 @@ namespace csX75
 			translate_z += forward * cos((angle_y) * M_PI / 180);
 			render();
 		}
+		left_upper_arm_x_angle = 0;
+		right_upper_arm_x_angle = 0;
+		left_leg_hip_angle = 0;
+		right_leg_hip_angle = 0;
+		left_knee_angle = 0;
+		right_knee_angle = 0;
+		printState();
 	}
 
 	void run(){
 		int i = 0;
 		while(i < 2){
 			cout << i << endl;
-			double increment = 0.04;
+			double increment = 0.03;
 			double forward_len = 0.5;
 			double descend_len = 0.2;
 			run_part1(forward_len, increment, descend_len);
@@ -421,37 +540,41 @@ namespace csX75
 	}
 
 	void position_right_arm_for_punch(){
-		double increment = 0.05;
+		double increment = 0.03;
 
 		double right_upper_arm_x_angle_increment = (-76 - right_upper_arm_x_angle) * increment;
 		double right_upper_arm_z_angle_increment = (-59 - right_upper_arm_z_angle) * increment;
 		double right_elbow_angle_increment = (-89 - right_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
 			right_upper_arm_z_angle += right_upper_arm_z_angle_increment;
 			right_elbow_angle += right_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void position_left_arm_for_punch(){
-		double increment = 0.05;
+		double increment = 0.03;
 
 		double left_upper_arm_x_angle_increment = (-76 - left_upper_arm_x_angle) * increment;
 		double left_upper_arm_z_angle_increment = (59 - left_upper_arm_z_angle) * increment;
 		double left_elbow_angle_increment = (-89 - left_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			left_upper_arm_z_angle += left_upper_arm_z_angle_increment;
 			left_elbow_angle += left_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void punch_right(){
-		double increment = 0.05;
+		double increment = 0.03;
 
 		double left_upper_arm_x_angle_increment = (-76 - left_upper_arm_x_angle) * increment;
 		double left_upper_arm_z_angle_increment = (59 - left_upper_arm_z_angle) * increment;
@@ -461,6 +584,7 @@ namespace csX75
 		double right_upper_arm_z_angle_increment = (-61 - right_upper_arm_z_angle) * increment;
 		double right_elbow_angle_increment = (- right_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			left_upper_arm_z_angle += left_upper_arm_z_angle_increment;
@@ -471,10 +595,11 @@ namespace csX75
 			right_elbow_angle += right_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void punch_left(){
-		double increment = 0.05;
+		double increment = 0.03;
 
 		double right_upper_arm_x_angle_increment = (-76 - right_upper_arm_x_angle) * increment;
 		double right_upper_arm_z_angle_increment = (-59 - right_upper_arm_z_angle) * increment;
@@ -484,6 +609,7 @@ namespace csX75
 		double left_upper_arm_z_angle_increment = (61 - left_upper_arm_z_angle) * increment;
 		double left_elbow_angle_increment = (- left_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			right_upper_arm_x_angle += right_upper_arm_x_angle_increment;
 			right_upper_arm_z_angle += right_upper_arm_z_angle_increment;
@@ -493,56 +619,63 @@ namespace csX75
 			left_elbow_angle += left_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void position_for_taunt(){
-		double increment = 0.04;
+		double increment = 0.03;
 
 		double left_upper_arm_x_angle_increment = (-50 - left_upper_arm_x_angle) * increment;
 		double left_upper_arm_z_angle_increment = (30 - left_upper_arm_z_angle) * increment;
 		double left_elbow_angle_increment = (-89 - left_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			left_upper_arm_z_angle += left_upper_arm_z_angle_increment;
 			left_elbow_angle += left_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void taunt_move_back(){
-		double increment = 0.04;
+		double increment = 0.03;
 
 		double left_upper_arm_x_angle_increment = (-10 - left_upper_arm_x_angle) * increment;
 		double left_upper_arm_z_angle_increment = (30 - left_upper_arm_z_angle) * increment;
 		double left_elbow_angle_increment = (-80 - left_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			left_upper_arm_z_angle += left_upper_arm_z_angle_increment;
 			left_elbow_angle += left_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void taunt_move_forward(){
-		double increment = 0.04;
+		double increment = 0.03;
 
 		double left_upper_arm_x_angle_increment = (-30 - left_upper_arm_x_angle) * increment;
 		double left_upper_arm_z_angle_increment = (30 - left_upper_arm_z_angle) * increment;
 		double left_elbow_angle_increment = (-70 - left_elbow_angle) * increment;
 
+		printState();
 		for(double i = 0; i < 1; i+=increment){
 			left_upper_arm_x_angle += left_upper_arm_x_angle_increment;
 			left_upper_arm_z_angle += left_upper_arm_z_angle_increment;
 			left_elbow_angle += left_elbow_angle_increment;
 			render();
 		}
+		printState();
 	}
 
 	void taunt(){
-		double increment = 0.025;
-		while(true){
+		double increment = 0.03;
+		for(int i = 0; i < 3; i++){
 			position_for_taunt();
 			taunt_move_back();
 			taunt_move_forward();
@@ -554,11 +687,21 @@ namespace csX75
 	void punch(){
 		position_left_arm_for_punch();
 		position_right_arm_for_punch();
-		taunt();
-		/*for(int i = 0; i < 30; i++){
+		//taunt();
+		for(int i = 0; i < 4; i++){
 			punch_right();
 			punch_left();
-		}*/
+		}
+	}
+
+
+	void animate(){
+		run();
+		punch();
+		taunt();
+		punch();
+		transform();
+		transform_back();
 	}
 
 	void Animate(GLFWwindow* window){
@@ -814,7 +957,7 @@ namespace csX75
 
 			camera3[3]-=0.1 * sin((angle_y) * M_PI / 180);
 			camera3[5]-=0.1 * cos((angle_y) * M_PI / 180);
-			tyre_x_angle -= 5;
+			tyre_x_angle += 5;
 			// ChangeView();
 		}
 		else if(key == GLFW_KEY_RIGHT && action == GLFW_RELEASE){
@@ -842,7 +985,7 @@ namespace csX75
 
 			camera3[3] = translate_x + camera3_look_at * sin(angle_y * M_PI / 180);
 			camera3[5] = translate_z + camera3_look_at * cos(angle_y * M_PI / 180);
-			tyre_x_angle += 5;
+			tyre_x_angle -= 5;
 			// ChangeView();
 		}
 		else if(key == GLFW_KEY_LEFT && action == GLFW_RELEASE){
@@ -870,10 +1013,10 @@ namespace csX75
 
 			camera3[3] = translate_x + camera3_look_at * sin(angle_y * M_PI / 180);
 			camera3[5] = translate_z + camera3_look_at * cos(angle_y * M_PI / 180);
-			tyre_x_angle += 5;
+			tyre_x_angle -= 5;
 			// ChangeView();
 		}
-		else if(key==GLFW_KEY_B && action == GLFW_PRESS) punch();
+		else if(key==GLFW_KEY_B && action == GLFW_PRESS) animate();
 		else if(key==GLFW_KEY_L){
 			std::cout << "Left x angle - " << left_upper_arm_x_angle << std::endl;
 			std::cout << "Left z angle - " << left_upper_arm_z_angle << std::endl;
